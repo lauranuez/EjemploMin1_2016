@@ -60,3 +60,21 @@ export async function deleteSubject(req: Request, res:Response): Promise<Respons
     }
 };
 
+export async function updateSubject(req: Request, res:Response): Promise<Response> { 
+    const {id} = req.params;
+    const {name, students} = req.body;
+    if (!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).send(`No subject with id: ${id}`);
+    }
+    else{
+        const updatedSubject = await Subject.findByIdAndUpdate(id,{
+            name: name,
+            students: students
+        }, {new:true});
+        return res.json({
+            message: 'Subject successfully updated',
+            updatedSubject
+        });
+    }    
+}
+
